@@ -27,6 +27,28 @@ class Student(db.Model):
     birth = db.Column(db.Date)
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
+    @staticmethod
+    def generate_fake(count = 1000):
+        from sqlalchemy.exc import IntregrityError
+        from random import seed, randint
+        import forgery_py
+
+        seed()
+        school_count = School.query.count()
+        for i in range(count):
+            randschool = School.query.offset(randint(0, school_count - 1)).first()
+            student = Student(first_name = forgery_py.name.first_name(),
+                              last_name = forgery_py.name.last_name(),
+                              forename = forgery_py.name.first_name(),
+                              sex = forgery_py.personal.abbreviated_gender(),
+                              birth = forgery_py.date.date(past = True, min_delta = 1000, max_delta = 7300),
+                              school = randschool)
+            db.session.add(student)
+            try:
+                db.session.commit()
+            except IntregrityError:
+                db.session.rollback()
+
     def __repr__(self):
         return '<Eleve {first_name} {last_name} {forename}>'.format(first_name = self.first_name,
                 last_name = self.last_name,forename = self.forename)
@@ -51,13 +73,12 @@ class School(db.Model):
 
         seed()
         for i in range(count):
-            sc = School(email = forgery_py.internet.email_address(),
-                        name = forgery_py.name.company_name(),
-                        state = forgery_py.address.state(),
-                        city = forgery_py.address.city(),
-                        street_name = forgery_py.address.street_name())
-
-            db.session.add(sc)
+            school = School(email = forgery_py.internet.email_address(),
+                            name = forgery_py.name.company_name(),
+                            state = forgery_py.address.state(),
+                            city = forgery_py.address.city(),
+                            street_name = forgery_py.address.street_name())
+            db.session.add(school)
             try:
                 db.session.commit()
             except IntregrityError:
