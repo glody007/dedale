@@ -10,12 +10,32 @@ class AdminSchool(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
+    @staticmethod
+    def generate_fake(count = 100):
+        from sqlalchemy.exc import IntegrityError
+        from random import seed, randint
+        import forgery_py
+
+        seed()
+        school_count = School.query.count()
+        for i in range(count):
+            randschool = School.query.offset(randint(0, school_count - 1)).first()
+            admin = AdminSchool(email = forgery_py.internet.email_address(),
+                                username = forgery_py.internet.user_name(),
+                                password_hash = forgery_py.lorem_ipsum.word(),
+                                school = randschool)
+            db.session.add(admin)
+            try:
+                db.session.commit()
+            except IntegrityError:
+                db.session.rollback()
+
     def __repr__(self):
         return '<AdminSchool {email}>'.format(email = self.email)
 
 class Student(db.Model):
     __tablename__ = 'students'
-    #composite de la contrainte:unique de first_name last_name forename sex birth school_id
+    #composite UniqueConstraint de first_name last_name forename sex birth school_id
     __table_args__ = tuple(UniqueConstraint('first_name', 'last_name', 'forename',
                            'sex', 'birth', 'school_id', name='student_unique_constraint'))
 
@@ -29,7 +49,7 @@ class Student(db.Model):
 
     @staticmethod
     def generate_fake(count = 1000):
-        from sqlalchemy.exc import IntregrityError
+        from sqlalchemy.exc import IntegrityError
         from random import seed, randint
         import forgery_py
 
@@ -46,7 +66,7 @@ class Student(db.Model):
             db.session.add(student)
             try:
                 db.session.commit()
-            except IntregrityError:
+            except IntegrityError:
                 db.session.rollback()
 
     def __repr__(self):
@@ -67,7 +87,7 @@ class School(db.Model):
 
     @staticmethod
     def generate_fake(count = 100):
-        from sqlalchemy.exc import IntregrityError
+        from sqlalchemy.exc import IntegrityError
         from random import seed
         import forgery_py
 
@@ -81,7 +101,7 @@ class School(db.Model):
             db.session.add(school)
             try:
                 db.session.commit()
-            except IntregrityError:
+            except IntegrityError:
                 db.session.rollback()
 
     def __repr__(self):
