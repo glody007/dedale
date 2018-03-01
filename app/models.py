@@ -14,20 +14,25 @@ class AdminSchool(UserMixin, db.Model):
 
 class Student(db.Model):
     __tablename__ = 'students'
+    __table_args__ = tuple(UniqueConstraint('first_name', 'last_name', 'forename',
+                           'sex', 'birth', 'school_id', name='student_unique_constraint'))
+                           
     id = db.Column(db.Integer, primary_key = True)
     first_name = db.Column(db.String(15), index = True)
     last_name = db.Column(db.String(15), index = True)
     forename = db.Column(db.String(15), index = True)
     sex = db.Column(db.String(1), index = True)
-    #birth = db.Column(db.Date)
+    birth = db.Column(db.Date)
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
 
     def __repr__(self):
-        return '<Eleve {first_name} {last_name} {forename}>'.format(first_name = self.first_name,last_name = self.last_name,forename = self.forename)
+        return '<Eleve {first_name} {last_name} {forename}>'.format(first_name = self.first_name,
+                last_name = self.last_name,forename = self.forename)
 
 class School(db.Model):
     __tablename__ = 'schools'
     id  = db.Column(db.Integer, primary_key = True)
+    email = db.Column(db.String(64),unique = True, index = True)
     name = db.Column(db.String(20), index = True)
     country = db.Column(db.String(20), index = True)
     town = db.Column(db.String(20), index = True)
