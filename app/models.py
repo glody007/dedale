@@ -1,5 +1,6 @@
 from . import db
 from flask_login import UserMixin
+from sqlalchemy import UniqueConstraint
 
 class AdminSchool(UserMixin, db.Model):
     __tablename__ = 'AdminSchools'
@@ -14,9 +15,9 @@ class AdminSchool(UserMixin, db.Model):
 
 class Student(db.Model):
     __tablename__ = 'students'
-    __table_args__ = tuple(UniqueConstraint('first_name', 'last_name', 'forename',
-                           'sex', 'birth', 'school_id', name='student_unique_constraint'))
-                           
+    #composite de la contrainte:unique de first_name last_name forename sex birth school_id
+    __table_args__ = tuple(UniqueConstraint('first_name', 'last_name', 'forename','sex', 'birth', 'school_id', name='student_unique_constraint'))
+
     id = db.Column(db.Integer, primary_key = True)
     first_name = db.Column(db.String(15), index = True)
     last_name = db.Column(db.String(15), index = True)
