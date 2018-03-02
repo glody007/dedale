@@ -1,6 +1,7 @@
 from flask import Flask
 from config import config
 from flask_sqlalchemy  import SQLAlchemy
+from flask_login
 from .main import main as main_blueprint
 from .auth import auth as auth_blueprint
 
