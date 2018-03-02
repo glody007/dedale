@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
+from . import login_manager
 
 class AdminSchool(UserMixin, db.Model):
     __tablename__ = 'AdminSchools'
@@ -32,6 +33,10 @@ class AdminSchool(UserMixin, db.Model):
 
     def __repr__(self):
         return '<AdminSchool {email}>'.format(email = self.email)
+
+@login_manager.user_loader
+def load_admin(admin_id):
+    return AdminSchool.query.get(int(admin_id))
 
 class Student(db.Model):
     __tablename__ = 'students'
