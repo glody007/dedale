@@ -1,0 +1,36 @@
+body {
+  font-family: TT Commons, sans-serif;
+}
+
+section {
+  padding: 50px 0;
+}
+
+img {
+  height: 500px;
+  width: auto;
+}
+
+header {
+  padding-bottom: 100px;
+  background-color: #4a9eef;
+}
+
+.navbar-brand, .nav-link{
+  color: white;
+}
+
+.navbar-brand {
+  font-size: 30px;
+  font-weight: bold;
+}
+
+main {
+  padding: 50px 0;
+  background-color: #eff0f2;
+}
+
+footer {
+  height: 400px;
+  background-color: #022244;
+}
