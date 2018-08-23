@@ -1,30 +1,70 @@
 {% extends "bootstrap/base.html" %}
 
-{% block content%}
-<body>
-  <header class="container">
+{% block head %}
+{{ super() }}
+<link rel="stylesheet"  type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block navbar %}
+<header class="container-fluid">
+  <div class="container">
     <nav class="navbar navbar-expand-lg row">
-      <a class="navbar-brand col-3" href="#">Navbar</a>
+      <a class="navbar-brand col-3" href="#">dedale</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse row" id="navbarNav">
         <ul class="navbar-nav col-lg-10">
             <li class="nav-item active">
-              <a class="nav-link" href='#'>Home</a>
+              <a class="nav-link" href='#'>Pourquoi dedale?</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href='#'>Home</a>
+              <a class="nav-link" href='#'>Prix</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href='#'>Home</a>
+              <a class="nav-link" href='#'>Contactez-nous</a>
             </li>
         </ul>
         <button type="button" class="btn btn-outline-primary">Get Started</button>
      </div>
     </nav>
-  </header>
-  <footer>
-  </footer>
-</body>
+  </div>
+</header>
+{% endblock %}
+
+{% block content%}
+<main class="container-fluid">
+  <section class="why-dedale row align-items-center">
+    <p class="col-md-5 offset-md-1">
+      Docker provides container software that
+      is ideal for developers and teams looking to get started
+      and experimenting with container-based applications.
+      Docker Desktop provides an integrated container-native
+      development experience; it launches as an application
+      from your Mac or Windows toolbar and provides
+      access to the largest library of community and
+      certified Linux and Windows content from Docker Hub.
+      Still trying to learn more about containers and the difference
+      between a container and a VM? Find out what's possible with Docker Containers.
+    </p>
+    <img src="{{ url_for('static', filename='63730969.jpg') }}" class="col-md-5 offset-md-1">
+  </section>
+  <section class="dedale-difference row align-items-center mt-lg-2">
+    <img src="{{ url_for('static', filename='63730969.jpg') }}" class="col-md-5">
+    <p class="col-md-5 offset-md-1">
+      Docker provides container software that
+      is ideal for developers and teams looking to get started
+      and experimenting with container-based applications.
+      Docker Desktop provides an integrated container-native
+      development experience; it launches as an application
+      from your Mac or Windows toolbar and provides
+      access to the largest library of community and
+      certified Linux and Windows content from Docker Hub.
+      Still trying to learn more about containers and the difference
+      between a container and a VM? Find out what's possible with Docker Containers.
+    </p>
+  </section>
+</main>
+<footer>
+</footer>
 {% endblock %}
