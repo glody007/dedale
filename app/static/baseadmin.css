@@ -1,0 +1,42 @@
+header{
+  padding: 0;
+}
+
+h1 {
+  color: white;
+  padding: 100px 0;
+}
+
+.main{
+  padding: 100px 0;
+}
+
+.admin-nav{
+  background-color: #022244;
+}
+
+.admin-nav-link{
+  color: grey;
+}
+
+.nav-tabs > li > a.active{
+  border-top-style: solid !important;
+  border-top-color: #4a9eef !important;
+  border-top-width: medium;
+}
+
+.file-tease-top-block{
+  border-bottom-style: solid;
+  border-bottom-color: #4a9eef;
+}
+
+.data-record{
+  height: 250px;
+  width: 150px;
+  margin-bottom: 30px;
+  background-color: #4a9eef;
+}
+
+.download-buttons{
+  padding-bottom: 50px;
+}

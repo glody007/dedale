@@ -11,4 +11,9 @@ def student(id):
     student = Student.query.filter_by(id=int(id)).first()
     if student is None:
         abort(404)
-    return render_template('infostudent.html', name=student.first_name)
+    dico = {'Prenom':'alchemist',
+            'Nom':'mbutwile',
+            'Post-nom':'lubaba',
+            'Ecole': 'Monk',
+            'Pourcentage': '100%'}
+    return render_template('infostudent.html', dico=dico)

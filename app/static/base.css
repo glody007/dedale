@@ -25,6 +25,11 @@ header {
   font-weight: bold;
 }
 
+#image {
+  height: 500px;
+  background-image: url(63730969.jpg);
+}
+
 main {
   padding: 50px 0;
   background-color: #eff0f2;
@@ -33,4 +38,10 @@ main {
 footer {
   height: 400px;
   background-color: #022244;
+}
+
+.btn-outline-primary.btn-custom{
+  background-color: #4a9eef;
+  border-color: white;
+  color: white;
 }

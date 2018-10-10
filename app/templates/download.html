@@ -6,9 +6,22 @@
 {{ super() }}
 
 <div class="container">
-  <section class="pdf">
-  </section>
-  <section class="pdf">
+  <section class="main">
+    <!--file have tease and download button-->
+    <div class="row file boder border boder-secondary rounded">
+      <!--file tease have name date of creation and size-->
+      <div class="file-tease col-10">
+        <div class="file-tease-top-block">
+          <span>file_name.pdf</span>
+          <span class="float-right">date_of_creation</span>
+        </div>
+        <div class="file-tease-bottom-block">
+          <span>file_size</span>
+        </div>
+      </div>
+      <!--file download have button to download file-->
+      <button type="button" class="btn btn-outline-primary col-2">Download</button>
+    </div>
   </section>
 </div>
 {% endblock content%}

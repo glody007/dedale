@@ -6,13 +6,42 @@
 {{ super() }}
 
 <div class="container">
-  <section class="pdf">
-  </section>
-  <section class="pdf">
+  <section class="main">
+    <div class="download-buttons">
+      <div class="row justify-content-center">
+        <label class="btn btn-outline-primary col-3">
+          Telecharger
+        </label>
+        <label class="btn btn-outline-primary col-3">
+          Uploader<input type="file" style="display: none;">
+        </label>
+      </div>
+    </div>
+    <table class="table">
+      <caption>List of student</caption>
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Prenom</th>
+          <th scope="col">Nom</th>
+          <th scope="col">Post-nom</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students %}
+        <tr>
+          <th scope="row">{{ loop.index }}</th>
+          <td>{{ student.forename }}</td>
+          <td>{{ student.first_name }}</td>
+          <td>{{ student.last_name }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </section>
 </div>
 {% endblock content%}
 
 {% block titre %}
-  Ajouter, Modifier et Effacer des fiches
+  Telecharger et Uploader le fichier Excel
 {% endblock%}
