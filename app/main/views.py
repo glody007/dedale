@@ -17,3 +17,7 @@ def student(id):
             'Ecole': 'Monk',
             'Pourcentage': '100%'}
     return render_template('infostudent.html', dico=dico)
+
+@main.route('/contact')
+def contact():
+    return 'contact us'
