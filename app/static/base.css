@@ -25,9 +25,16 @@ header {
   font-weight: bold;
 }
 
-#image {
-  height: 500px;
-  background-image: url(63730969.jpg);
+#image1 {
+  height: 600px;
+  background-image: url(photo1.png);
+  margin-bottom: 100px;
+}
+
+#image2 {
+  height: 600px;
+  background-image: url(photo2.png);
+  margin-bottom: 100px;
 }
 
 main {
