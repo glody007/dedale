@@ -25,6 +25,14 @@ header {
   font-weight: bold;
 }
 
+.section-title {
+  color: #022244;
+}
+
+.section-text {
+  color: #72818f;
+}
+
 #image1 {
   height: 600px;
   background-image: url(photo1.png);
