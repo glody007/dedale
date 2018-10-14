@@ -13,10 +13,14 @@
       <a class="navbar-brand col-3" href="{{ url_for('main.index') }}">dedale</a>
       <ul class="navbar-nav col-6">
           <li class="nav-item">
-            <a class="nav-link" href="{{ url_for('main.contact') }}">Contactez-nous</a>
+            <!--<a class="nav-link" href="{{ url_for('main.contact') }}">Contactez-nous</a>-->
           </li>
       </ul>
     </nav>
+    <h1 class="home-title">
+      La solution la plus facile pour la protection de
+      vos documents contre la falsification.
+    </h1>
   </div>
   {% endblock header%}
 </header>
@@ -26,6 +30,15 @@
 
 <footer>
   {% block footer%}
+  <div class="row justify-content-center">
+      <div class="col-10">
+        <p class="contact">
+          <strong class="footer-title">Contactez-nous</strong><br><br>
+          email: dedalexyz@gmail.com<br>
+          phone: +243 997028901
+        </p>
+      </div>
+  </div>
   {% endblock footer%}
 </footer>
 {% endblock body%}

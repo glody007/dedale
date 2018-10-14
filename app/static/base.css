@@ -20,6 +20,11 @@ header {
   color: white;
 }
 
+.contact {
+  padding-top: 50px;
+  color: white;
+}
+
 .navbar-brand {
   font-size: 30px;
   font-weight: bold;
@@ -31,6 +36,17 @@ header {
 
 .section-text {
   color: #72818f;
+}
+
+.home-title {
+  color: white;
+  font-weight: bold;
+  font-size: 50px;
+  padding-top: 50px;
+}
+
+.footer-title {
+    margin-bottom: 50px;
 }
 
 #image1 {
