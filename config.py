@@ -16,7 +16,12 @@ class TestingConfig(Config):
     TESTING = True
 
 class ProductionConfig(Config):
-      pass
+    SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
+        username     = "glody",
+        password     = "dedale118",
+        hostname     = "glody.mysql.pythonanywhere-services.com",
+        databasename = "glody$school",
+    )
 
 config = {
     'development' : DevelopmentConfig,
