@@ -1,3 +1,6 @@
+map_table = [[],
+             [],
+             []]
 #prend un caractere
 #renvoi un nombre sous forme de caractere
 def num_from_char(char):
@@ -37,12 +40,12 @@ def consecutive_pair(number):
     length =  len(number)
     while pos < length:
         if length - pos >= 2:
-            pair = number[pos:pos+2]
-            if number[pos] is not '0':
-                pos += 2
-            else:
+            if int(number[pos]) == 0 or int(number[pos]) >= 6:
                 pair = number[pos:pos+1]
                 pos += 1
+            else:
+                pair = number[pos:pos+2]
+                pos += 2
         else:
             pair = number[pos:pos+1]
             pos += 1
@@ -58,3 +61,6 @@ def string_from_num(number):
     for val in  consecutive_pair(number):
         out_put_string += char_from_num(val)
     return out_put_string
+
+for val in consecutive_pair('70608090123456'):
+    print val
