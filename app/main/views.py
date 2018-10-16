@@ -16,4 +16,4 @@ def student(id):
             'Post-nom':'lubaba',
             'Ecole': 'Monk',
             'Pourcentage': '100%'}
-    return render_template('infostudent.html', dico=dico)
+    return render_template('infostudent.html', student=student)

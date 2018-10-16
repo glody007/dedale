@@ -12,12 +12,26 @@
       <div class="col-6">
         <table class="table table-striped table-bordered">
           <tbody>
-            {% for key, value in dico.items() %}
             <tr>
-              <td>{{ key }}</td>
-              <td class="text-right">{{ value }}</td>
+              <td>Nom</td>
+              <td class="text-right">{{ student.first_name }}</td>
             </tr>
-            {% endfor %}
+            <tr>
+              <td>Post-nom</td>
+              <td class="text-right">{{ student.last_name }}</td>
+            </tr>
+            <tr>
+              <td>Prénom</td>
+              <td class="text-right">{{ student.forename }}</td>
+            </tr>
+            <tr>
+              <td>Sexe</td>
+              <td class="text-right">{{ student.sex }}</td>
+            </tr>
+            <tr>
+              <td>School</td>
+              <td class="text-right">{{ student.school }}</td>
+            </tr>
           </tbody>
         </table>
       </div>
