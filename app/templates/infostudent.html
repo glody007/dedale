@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block titre %}
-Information
+Informations and Datas
 {% endblock%}
 
 {% block content%}
@@ -18,23 +18,33 @@ Information
           <tbody>
             <tr>
               <td>Nom</td>
-              <td class="text-right">{{ student.first_name }}</td>
+              <td class="text-right">
+                <span class="badge badge-primary badge-pill">{{ student.first_name }}</span>
+              </td>
             </tr>
             <tr>
               <td>Post-nom</td>
-              <td class="text-right">{{ student.last_name }}</td>
+              <td class="text-right">
+                <span class="badge badge-primary badge-pill">{{ student.last_name }}</span>
+              </td>
             </tr>
             <tr>
               <td>Prénom</td>
-              <td class="text-right">{{ student.forename }}</td>
+              <td class="text-right">
+                <span class="badge badge-primary badge-pill">{{ student.forename }}</span>
+              </td>
             </tr>
             <tr>
               <td>Sexe</td>
-              <td class="text-right">{{ student.sex }}</td>
+              <td class="text-right">
+                <span class="badge badge-primary badge-pill">{{ student.sex }}</span>
+              </td>
             </tr>
             <tr>
               <td>School</td>
-              <td class="text-right">{{ student.school }}</td>
+              <td class="text-right">
+                <span class="badge badge-primary badge-pill">{{ student.school.name }}</span>
+              </td>
             </tr>
           </tbody>
         </table>
