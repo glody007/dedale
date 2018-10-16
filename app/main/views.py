@@ -8,7 +8,10 @@ def index():
 @main.route('/student/<id>')
 def student(id):
     from ..models import Student
-    student = Student.query.filter_by(id=int(id)).first()
+    from ..url_map import num_from_string
+    num_id = int(num_from_string(id))
+    num_id -= 10000
+    student = Student.query.filter_by(id=num_id).first()
     if student is None:
         abort(404)
     dico = {'Prenom':'alchemist',
