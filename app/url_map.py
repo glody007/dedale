@@ -56,9 +56,5 @@ def string_from_num(number):
     if len(number) == 0:
         return ValueError()
     for val in  consecutive_pair(number):
-        print(val)
         out_put_string += char_from_num(val)
     return out_put_string
-
-print string_from_num('10001')
-print num_from_string('A001')
