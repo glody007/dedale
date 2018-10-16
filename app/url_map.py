@@ -3,11 +3,11 @@
 def num_from_char(char):
     ascii_value = ord(char)
     if ascii_value >= 48 and ascii_value <= 57:
-        return str(ascii_value - 48 + 1)
+        return str(ascii_value - 48)
     elif ascii_value >= 65 and ascii_value <= 90:
-        return str(ascii_value - 65 + 11)
+        return str(ascii_value - 65 + 10)
     elif ascii_value >= 97 and ascii_value <= 122:
-        return str(ascii_value - 97 + 37)
+        return str(ascii_value - 97 + 36)
     else:
         raise ValueError()
 
@@ -25,12 +25,12 @@ def char_from_num(number):
     int_number = int(number)
     if int_number < 0 or int_number > 62:
         raise ValueError()
-    elif int_number <= 10:
-        return str(unichr(int_number+ 48 - 1))
-    elif int_number <= 36:
-        return str(unichr(int_number + 65 - 11))
-    elif int_number <= 62:
-        return str(unichr(int_number + 97 - 37))
+    elif int_number <= 9:
+        return str(unichr(int_number + 48))
+    elif int_number <= 35:
+        return str(unichr(int_number + 65 - 10))
+    elif int_number <= 61:
+        return str(unichr(int_number + 97 - 36))
 
 def consecutive_pair(number):
     pos = 0
@@ -38,10 +38,15 @@ def consecutive_pair(number):
     while pos < length:
         if length - pos >= 2:
             pair = number[pos:pos+2]
+            if number[pos] is not '0':
+                pos += 2
+            else:
+                pair = number[pos:pos+1]
+                pos += 1
         else:
             pair = number[pos:pos+1]
+            pos += 1
         yield pair
-        pos += 2
 
 
 #prend un nombre sous forme de string
@@ -51,8 +56,9 @@ def string_from_num(number):
     if len(number) == 0:
         return ValueError()
     for val in  consecutive_pair(number):
+        print(val)
         out_put_string += char_from_num(val)
     return out_put_string
 
-print string_from_num('1234567')
-print num_from_string('BXt6')
+print string_from_num('10001')
+print num_from_string('A001')
