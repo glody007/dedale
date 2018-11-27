@@ -61,6 +61,3 @@ def string_from_num(number):
     for val in  consecutive_pair(number):
         out_put_string += char_from_num(val)
     return out_put_string
-
-for val in consecutive_pair('70608090123456'):
-    print val
