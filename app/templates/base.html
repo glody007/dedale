@@ -17,12 +17,14 @@
           </li>
       </ul>
     </nav>
+    {% if header_title == 'True' %}
     <h1 class="home-title">
       {% block titre %}
       La solution la plus facile pour la protection de
       vos documents contre la falsification.
       {% endblock %}
     </h1>
+    {% endif %}
   </div>
   {% endblock header%}
 </header>

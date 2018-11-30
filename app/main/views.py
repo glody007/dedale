@@ -1,4 +1,4 @@
-from flask import render_template
+from flask import render_template, abort
 from . import main
 
 @main.route('/')
@@ -14,9 +14,5 @@ def student(id):
     student = Student.query.filter_by(id=num_id).first()
     if student is None:
         abort(404)
-    dico = {'Prenom':'alchemist',
-            'Nom':'mbutwile',
-            'Post-nom':'lubaba',
-            'Ecole': 'Monk',
-            'Pourcentage': '100%'}
+
     return render_template('infostudent.html', student=student)

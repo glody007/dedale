@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% set header_title = "True" %}
+
+{% block styles %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='info.css') }}">
+{% endblock %}
+
+{% block titre %}
+Update student data
+{% endblock%}
+
+{% block content%}
+<div class="container">
+  <section class="main">
+    <div class="row justify-content-center dico-content ">
+      <div class="col-6">
+        {{ wtf.quick_form(form) }}
+      </div>
+    </div>
+  </section>
+</div>
+{% endblock %}
