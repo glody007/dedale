@@ -1,0 +1,76 @@
+{% extends "baseadmin.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block content %}
+{{ super() }}
+
+<div class="container">
+  <section class="main">
+    <div class="download-buttons">
+      <div class="row justify-content-center">
+        <label class="btn btn-outline-primary btn-lg col-5 col-sm-3" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+          <i class="fas fa-plus fa-padding-right"></i>
+          Add school
+        </label>
+      </div>
+    </div>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add School</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            {{ wtf.quick_form(form) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="schools row justify-content-center">
+      <!--la zone contenant la liste des ecoles-->
+      <div class="list-school col-10 row justify-content-center">
+        {% for school in schools %}
+        <!--la zone contenant les informations de l'ecole-->
+        <div class="school col-8 col-sm-6 col-md-4 col-lg-3 border rounded">
+          <!--la zone contenant le nom de l'ecole-->
+          <div class="header-school border-bottom row justify-content-center">
+            <a class="text-dark btn" href="{{ url_for('auth.admin_students', id=school.id) }}">
+              <div class="header-school-content">
+                <div class="name-school">
+                  <h4>{{ school.name }}</h4>
+                </div>
+                <div class="state-school">
+                  <p>{{ school.state }}</p>
+                </div>
+                <div class="city-school">
+                  <p>{{ school.city }}</p>
+                </div>
+              </div>
+            </a>
+          </div>
+          <!--la zone contant les liens d'edition-->
+          <div class="footer-school row justify-content-center">
+            <a class="footer-school-element" href="{{ url_for('auth.edit_school', id=school.id) }}">
+              <i class="fas fa-pencil-alt"></i>Edit
+            </a>
+            <a class="footer-school-element" href="{{ url_for('auth.delete_school', id=school.id) }}">
+              <i class="fas fa-trash"></i>Delete
+            </a>
+          </div>
+        </div>
+        <br/>
+        {% endfor %}
+      </div>
+    </section>
+  </section>
+</div>
+{% endblock content%}
+
+{% block titre %}
+  Administration des écoles
+{% endblock%}

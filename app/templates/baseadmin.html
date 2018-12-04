@@ -11,17 +11,5 @@
     {% block titre %}
     {% endblock %}
   </h1>
-  <ul class="nav nav-tabs justify-content-center">
-    <li class="nav-item active">
-      <a class="nav-link admin-nav-link {% if active_page == 'datas' %} active {% endif %}" href="{{ url_for('auth.admin_students') }}">
-        Record card
-      </a>
-    </li>
-    <li class="nav-item">
-      <a class="nav-link admin-nav-link {% if active_page == 'download' %} active {% endif %}" href="{{ url_for('auth.admin_download') }}">
-        Download
-      </a>
-    </li>
-  </ul>
 </div>
 {% endblock content %}
