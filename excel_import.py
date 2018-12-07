@@ -1,6 +1,8 @@
 from openpyxl import load_workbook
 
-class DicoFromExcel:
+'''extract data from excel file and retrieve
+   list of dico of every row'''
+class FromExcelToList:
 
     def __init__(self, path):
 
