@@ -16,7 +16,7 @@ header {
   background-color: #4a9eef;
 }
 
-.navbar-brand, .nav-link{
+.navbar-brand, .nav-link, .nav-item{
   color: white;
 }
 

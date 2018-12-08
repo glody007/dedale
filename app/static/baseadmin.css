@@ -2,7 +2,7 @@ header{
   padding: 0;
 }
 
-h1 {
+h1{
   color: white;
   padding: 100px 0;
 }
@@ -41,17 +41,13 @@ h1 {
   padding-bottom: 50px;
 }
 
-.school {
+.school{
   transition: box-shadow .3s;
   margin: 10px;
 }
 
 .school:hover{
-   box-shadow: 0 0 11px rgba(33,33,33,.2);
-}
-
-.fa-padding-right {
-  padding-right: : 20%;
+   box-shadow: 0 0 14px rgba(33,33,33,.2);
 }
 
 .footer-school, .header-school{

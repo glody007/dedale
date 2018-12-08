@@ -12,10 +12,19 @@
   <div class="container">
     <nav class="navbar navbar-expand-sm row">
       <a class="navbar-brand col-3" href="{{ url_for('main.index') }}">dedale</a>
-      <ul class="navbar-nav col-6">
-          <li class="nav-item">
-
-          </li>
+      <ul class="navbar-nav ml-auto">
+        {% if current_user.is_authenticated %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.admin_schools') }}">Admin</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.logout') }}">Logout</a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+          <a class="nav-link" href="{{ url_for('auth.login') }}">Login</a>
+        </li>
+        {% endif %}
       </ul>
     </nav>
     {% if header_title == 'True' %}

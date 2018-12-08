@@ -1,8 +1,29 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from . import auth
-from .forms import AddStudentForm, AddSchoolForm, registered_student
+from .forms import AddStudentForm, AddSchoolForm, registered_student, LoginForm
+from flask_login import login_user, logout_user, login_required
 
-@auth.route('/admin/schools', methods=['GET', 'POST'])
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
+    from ..models import AdminSchool
+    form = LoginForm()
+    if form.validate_on_submit():
+        admin_school = AdminSchool.query.filter_by(email=form.email.data).first()
+        if admin_school is not None and admin_school.verify_password(form.password.data):
+            login_user(admin_school, form.remember_me.data)
+            return redirect(request.args.get('next') or url_for('auth.admin_schools'))
+        flash('Invalid username or password.')
+    return render_template('login.html', form=form)
+
+@auth.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.')
+    return redirect(url_for('auth.login'))
+
+@auth.route('/schools', methods=['GET', 'POST'])
+@login_required
 def admin_schools():
     from ..models import School
     from .. import db
@@ -22,7 +43,8 @@ def admin_schools():
     return render_template('schools.html', schools=schools,
                             school_id=1, form=form)
 
-@auth.route('/admin/school/delete/<int:id>', methods=['GET'])
+@auth.route('/school/delete/<int:id>', methods=['GET'])
+@login_required
 def delete_school(id):
     from ..models import School
     from .. import db
@@ -33,7 +55,8 @@ def delete_school(id):
 
     return redirect(url_for('auth.admin_schools'))
 
-@auth.route('/admin/school/edit/<int:id>', methods=['GET', 'POST'])
+@auth.route('/school/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_school(id):
     from ..models import School
     from .. import db
@@ -59,7 +82,8 @@ def edit_school(id):
     form.street_name.data = school.street_name
     return render_template('update_school.html', form=form)
 
-@auth.route('/admin/schools/<int:id>', methods=['GET', 'POST'])
+@auth.route('/schools/<int:id>', methods=['GET', 'POST'])
+@login_required
 def school_students(id):
     from ..models import Student, School
     school = School.query.get_or_404(id)
@@ -68,7 +92,8 @@ def school_students(id):
     students =  school.students
     return render_template('students.html', students=students, form=form, school_id=id)
 
-@auth.route('/admin/school/<int:id>', methods=['GET', 'POST'])
+@auth.route('/school/<int:id>', methods=['GET', 'POST'])
+@login_required
 def admin_students(id):
     from ..models import Student, School
     from .. import db
@@ -93,7 +118,8 @@ def admin_students(id):
     students = school.students
     return render_template('students.html', students=students, form=form, school_id=id)
 
-@auth.route('/admin/students/delete/<int:id>', methods=['GET', 'POST'])
+@auth.route('/students/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
 def delete_student(id):
     from ..models import Student
     from .. import db
@@ -104,7 +130,8 @@ def delete_student(id):
 
     return redirect(url_for('auth.admin_students', id=student.school_id, _external=True))
 
-@auth.route('/admin/students/edit/<int:id>', methods=['GET', 'POST'])
+@auth.route('/students/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
 def edit_student(id):
     from ..models import Student
     from .. import db
@@ -130,11 +157,3 @@ def edit_student(id):
     form.sex.data        = student.sex
     form.birth           = student.birth
     return render_template('update_student.html', form=form)
-
-
-@auth.route('/admin/school/<int:id>/download')
-def admin_download(id):
-    from ..models import Student
-    students = Student.query.all()
-
-    return render_template('download.html', students=students, school_id=id)

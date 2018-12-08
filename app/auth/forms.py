@@ -1,8 +1,8 @@
 from flask.ext.wtf import Form
 from wtforms import StringField, BooleanField, SubmitField,\
-                    RadioField, ValidationError
+                    RadioField, PasswordField, ValidationError
 from wtforms.fields.html5 import DateField
-from wtforms.validators import Required, Length
+from wtforms.validators import Required, Length, Email
 
 class AddStudentForm(Form):
     first_name = StringField('Nom', validators=[Required(), Length(1, 15)])
@@ -30,3 +30,10 @@ class AddSchoolForm(Form):
     street_name = StringField('Avenue', validators=[Required(), Length(1, 20)])
     email = StringField('Email', validators=[Required()])
     submit = SubmitField('Envoyer')
+
+class LoginForm(Form):
+    email = StringField('Email', validators=[Required(), Length(1, 64),
+                                             Email()])
+    password = PasswordField('Mot de passe', validators=[Required()])
+    remember_me = BooleanField('Keep me logged in')
+    submit = SubmitField('Connection')

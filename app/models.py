@@ -1,6 +1,8 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
+from werkzeug.security import generate_password_hash,\
+                              check_password_hash
 from . import login_manager
 
 class AdminSchool(UserMixin, db.Model):
@@ -10,6 +12,17 @@ class AdminSchool(UserMixin, db.Model):
     username = db.Column(db.String(32), nullable = True)
     password_hash = db.Column(db.String(128))
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
+
+    @property
+    def password(self):
+        raise AttributeError('password is not a readable attribute')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
 
     @staticmethod
     def generate_fake(count = 100):
@@ -111,3 +124,37 @@ class School(db.Model):
 
     def __repr__(self):
         return '<School {name}>'.format(name = self.name)
+
+'''take list that contain dictionaries of student's datas
+   add students to database'''
+def add_students_from_dicos(students_datas):
+    from sqlalchemy.exc import IntegrityError
+
+    students = []
+    for student_datas in students_datas:
+        student = Student(first_name=students_datas['first_name'],
+                          last_name=student_datas['last_name'],
+                          forename=student_datas['forename'],
+                          school_id=student_datas['school_id'],
+                          sex=student_datas['sex'])
+        students.append(student)
+
+    db.session.add_all(students)
+    try:
+        db.session.commit()
+    except IntegrityError:
+        db.session.rollback()
+
+'''take list of students and generate list of
+   dictionaries containing datas of students'''
+def from_students_of_school_to_dicos(school_id):
+
+    school = School.query.get(school_id)
+    students = school.students
+    students_datas = []
+    for student in students:
+        students_datas.append({'first_name' : student.first_name,
+                              'last_name' : student.last_name,
+                              'forename' : student.forename,
+                              'sex' : student.sex})
+    return students_datas
