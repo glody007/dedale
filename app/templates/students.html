@@ -8,16 +8,27 @@
 
 <div class="container">
   <section class="main">
-    <div class="download-buttons">
-      <div class="row justify-content-center">
-        <label class="btn btn-outline-primary btn-lg col-3" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
+    <div class="download-buttons row justify-content-center">
+      <!--section avec le bouton et le formulaire d'upload-->
+      <div class="left-buttons col-3">
+        <!--le bouton pour ajouter un etudiant-->
+        <label class="btn btn-outline-primary btn-lg col-12" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
           <i class="fas fa-plus fa-padding-right"></i>
           Add student
         </label>
-        <label class="btn btn-outline-primary btn-lg col-3">
-          <i class="fas fa-file-upload"></i>
-          Add students from file<input type="file" style="display: none;">
-        </label>
+        <!--formulaire pour upload un fichier excel-->
+        <form method=POST enctype=multipart/form-data action="{{ url_for('auth.upload_file', id=school_id) }}" class="col-12">
+          <label class="btn btn-default btn-file">
+            add students from file<input type="file" id="addStudents" name="file" style="display: none;">
+          </label>
+          <label class="custom-file-label" for="addStudents">Choose file</label>
+          <button type="submit" class="btn btn-primary btn-lg">Envoyer le fichier</button>
+        </form>
+      </div>
+
+      <!--section avec le bouton de telechargement-->
+      <div class="right-buttons col-3">
+          <a href="{{ url_for('auth.download_file', id=school_id) }}" class="btn btn-success btn-lg">Download PDF</a>
       </div>
     </div>
 
