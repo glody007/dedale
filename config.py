@@ -5,7 +5,9 @@ print(os.path.dirname(__file__))
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'test.db')
     SECRET_KEY = "mysecretkey"
-    print SQLALCHEMY_DATABASE_URI
+    UPLOAD_FOLDER = '/tmp'
+    ALLOWED_EXTENSIONS = set(['xlsx'])
+
     @staticmethod
     def init_app(app):
         pass
