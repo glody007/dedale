@@ -127,15 +127,15 @@ class School(db.Model):
 
 '''take list that contain dictionaries of student's datas
    add students to database'''
-def add_students_from_dicos(students_datas):
+def add_students_to_school_from_dicos(students_datas, school_id):
     from sqlalchemy.exc import IntegrityError
 
     students = []
     for student_datas in students_datas:
-        student = Student(first_name=students_datas['first_name'],
+        student = Student(first_name=student_datas['first_name'],
                           last_name=student_datas['last_name'],
                           forename=student_datas['forename'],
-                          school_id=student_datas['school_id'],
+                          school_id=school_id,
                           sex=student_datas['sex'])
         students.append(student)
 

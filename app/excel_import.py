@@ -2,7 +2,7 @@ from openpyxl import load_workbook
 
 '''extract data from excel file and retrieve
    list of dico of every row'''
-class FromExcelToList:
+class ExcelDataExtractor:
 
     def __init__(self, path):
 
