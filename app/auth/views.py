@@ -173,7 +173,7 @@ def download_file(id):
     datas = []
     for student in students:
         custom_id = string_from_num(str(student.id))
-        main = 'http://www.dedale.xyz/student/' + custom_id
+        main = 'http://www.dedale.xyz/student/' + str(student.id)
         data = {'main' : main, 'info' : student.first_name}
         datas.append(data)
     #create file path from download folder and file name

@@ -54,10 +54,10 @@ def consecutive_pair(number):
 
 #prend un nombre sous forme de string
 #renvoi un string
-def string_from_num(number):
+def string_from_num(numeric_characters):
     out_put_string = ''
-    if len(number) == 0:
+    if len(numeric_characters) == 0:
         return ValueError()
-    for val in  consecutive_pair(number):
+    for val in  consecutive_pair(numeric_characters):
         out_put_string += char_from_num(val)
     return out_put_string

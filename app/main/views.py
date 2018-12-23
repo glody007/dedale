@@ -11,7 +11,7 @@ def student(id):
     from ..url_map import num_from_string
     num_id = int(num_from_string(id))
     num_id -= 12345
-    student = Student.query.filter_by(id=num_id).first()
+    student = Student.query.filter_by(id=id).first()
     if student is None:
         abort(404)
 
