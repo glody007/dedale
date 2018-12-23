@@ -1,7 +1,9 @@
-from flask import render_template, flash, redirect, url_for, request
+from flask import render_template, flash, redirect, url_for, request, send_file, current_app
 from . import auth
 from .forms import AddStudentForm, AddSchoolForm, registered_student, LoginForm
 from flask_login import login_user, logout_user, login_required
+from werkzeug.utils import secure_filename
+import os
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
@@ -157,3 +159,66 @@ def edit_student(id):
     form.sex.data        = student.sex
     form.birth           = student.birth
     return render_template('update_student.html', form=form)
+
+@auth.route('/file-download/<int:id>')
+@login_required
+def download_file(id):
+    from ..models import School
+    from ..qr_in_pdf import addQrInPdfFromDatas
+    from ..url_map import string_from_num
+    taille_qr = (100, 100)
+    #take all students from given school id
+    #create list of custom ids from their database ids
+    students = School.query.get_or_404(id).students
+    datas = []
+    for student in students:
+        custom_id = string_from_num(str(student.id))
+        main = 'http://www.dedale.xyz/student/' + custom_id
+        data = {'main' : main, 'info' : student.first_name}
+        datas.append(data)
+    #create file path from download folder and file name
+    #file name is school id concat with .pdf
+    download_folder = current_app.config['UPLOAD_FOLDER']
+    file_name = str(id) + '.pdf'
+    file_path = download_folder + '/' + file_name
+    #create pdf file with qrcodes from list of custom id
+    addQrInPdfFromDatas(datas, taille_qr, file_path)
+    try:
+        return send_file(file_path, attachment_filename=file_name)
+    except Exception as e:
+        return str(e)
+
+def allowed_file(filename):
+    allowed_extensions = current_app.config['ALLOWED_EXTENSIONS']
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+@auth.route('/file-upload/<int:id>', methods=['POST'])
+@login_required
+def upload_file(id):
+    from ..excel_import import ExcelDataExtractor
+    from ..models import Student, add_students_to_school_from_dicos
+
+    if request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in request.files:
+            flash('No file part')
+            return redirect(request.url)
+        file = request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flash('No selected file')
+            return redirect(request.url)
+        if file and allowed_file(file.filename):
+            filename = secure_filename(str(id) + file.filename)
+            upload_folder_name = os.path.join(current_app.config['UPLOAD_FOLDER'], filename)
+            file.save(upload_folder_name)
+            #import students data from file
+            #create list of dicos from those datas
+            xlsxToList = ExcelDataExtractor(upload_folder_name)
+            students_dicos = xlsxToList.getStudents()
+            #add students to database from dicos
+            add_students_to_school_from_dicos(students_dicos, id)
+
+            return redirect(url_for('auth.admin_students', id=id, _external=True))
