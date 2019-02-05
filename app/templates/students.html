@@ -10,7 +10,7 @@
   <section class="main">
     <div class="download-buttons row justify-content-center">
       <!--section avec le bouton et le formulaire d'upload-->
-      <div class="left-buttons col-3">
+      <div class="left-buttons col-12 col-md-3">
         <!--le bouton pour ajouter un etudiant-->
         <label class="btn btn-outline-primary btn-lg col-12" data-toggle="modal" data-target="#exampleModal" data-whatever="@mdo">
           <i class="fas fa-plus fa-padding-right"></i>
@@ -22,13 +22,13 @@
             add students from file<input type="file" id="addStudents" name="file" style="display: none;">
           </label>
           <label class="custom-file-label" for="addStudents">Choose file</label>
-          <button type="submit" class="btn btn-primary btn-lg">Envoyer le fichier</button>
+          <button type="submit" class="btn btn-primary btn-lg col-sm-12">Envoyer le fichier</button>
         </form>
       </div>
 
       <!--section avec le bouton de telechargement-->
-      <div class="right-buttons col-3">
-          <a href="{{ url_for('auth.download_file', id=school_id) }}" class="btn btn-success btn-lg">Download PDF</a>
+      <div class="right-buttons col-12 col-md-3">
+          <a href="{{ url_for('auth.download_file', id=school_id) }}" class="btn btn-success btn-lg col-sm-12">Download PDF</a>
       </div>
     </div>
 
@@ -49,7 +49,6 @@
     </div>
 
     <table class="table">
-      <caption>List of student</caption>
       <thead>
         <tr>
           <th width="10%">#</th>
