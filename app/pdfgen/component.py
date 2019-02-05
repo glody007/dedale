@@ -23,7 +23,7 @@ class Component:
     def getPageSize(self):
         return self.canvas.getSize()
 
-    def positionToDraw(self):
+    def drawingPosition(self):
         x = 0
         y = - self.size[1]
         return (x, y)
@@ -94,7 +94,7 @@ class Image(Component):
         self.size  = image.getSize()
 
     def drawToCanvas(self):
-        pos_to_draw = self.positionToDraw()
+        pos_to_draw = self.drawingPosition()
         abs_origin  = self.getAbsoluteOrigin()
         x = pos_to_draw[0] + abs_origin[0]
         y = pos_to_draw[1] - abs_origin[1]

@@ -92,15 +92,23 @@ class Student(db.Model):
         return '<Eleve {first_name} {last_name} {forename}>'.format(first_name = self.first_name,
                 last_name = self.last_name,forename = self.forename)
 
-
 class Departement(db.Model):
-    __tablename__ = 'promotions'
+    __tablename__ = 'departements'
     id = db.Column(db.Integer, primary_key = True)
     nom = db.Column(db.String(64), unique = True, index = True)
     students = db.relationship('Student', backref = 'departement', lazy = 'dynamic')
 
     def __repr__(self):
         return '<Departement {nom}>'.format(classe = self.nom)
+
+class Promotion(db.Model):
+    __tablename__ = 'promotions'
+    id = db.Column(db.Integer, primary_key = True)
+    niveau = db.Column(db.Integer, unique = True, index = True)
+    students = db.relationship('Student', backref = 'promotion', lazy = 'dynamic')
+
+    def __repr__(self):
+        return '<Promotion {niveau}>'.format(classe = self.niveau)
 
 class School(db.Model):
     __tablename__ = 'schools'

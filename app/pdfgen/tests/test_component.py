@@ -22,8 +22,8 @@ class TestComponentMethods(ComponentTestCase):
         self.assertEqual(self.component.getSize(), (0, 0),
                                'incorrect default size')
 
-    def test_positionToDraw(self):
-        self.assertEqual(self.component.positionToDraw(),
+    def test_drawingPosition(self):
+        self.assertEqual(self.component.drawingPosition(),
                          (0, 0),
                          'incorrect position to draw')
 
@@ -57,8 +57,8 @@ class TestImageMethods(ComponentTestCase):
                          (72, 72),
                          'incorrect size of image')
 
-    def test_positionToDraw(self):
-        self.assertEqual(self.component.positionToDraw(),
+    def test_drawingPosition(self):
+        self.assertEqual(self.component.drawingPosition(),
                          (0, -72),
                          'incorrect postion to draw')
 
