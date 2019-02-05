@@ -64,6 +64,7 @@ class Student(db.Model):
     sex = db.Column(db.String(1), index = True)
     birth = db.Column(db.Date)
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
+    pourcentage = db.Column(db.Integer, index = True)
 
     @staticmethod
     def generate_fake(count = 1000):
@@ -90,6 +91,16 @@ class Student(db.Model):
     def __repr__(self):
         return '<Eleve {first_name} {last_name} {forename}>'.format(first_name = self.first_name,
                 last_name = self.last_name,forename = self.forename)
+
+
+class Departement(db.Model):
+    __tablename__ = 'promotions'
+    id = db.Column(db.Integer, primary_key = True)
+    nom = db.Column(db.String(64), unique = True, index = True)
+    students = db.relationship('Student', backref = 'departement', lazy = 'dynamic')
+
+    def __repr__(self):
+        return '<Departement {nom}>'.format(classe = self.nom)
 
 class School(db.Model):
     __tablename__ = 'schools'
