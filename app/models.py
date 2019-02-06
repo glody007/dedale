@@ -14,7 +14,7 @@ class Permission:
     MODIFIER_SCHOOL  = 0x80
 
 class User(UserMixin, db.Model):
-    __tablename__ = 'Users'
+    __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(64),unique = True, index = True)
     username = db.Column(db.String(32), nullable = True)
