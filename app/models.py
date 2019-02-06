@@ -5,8 +5,16 @@ from werkzeug.security import generate_password_hash,\
                               check_password_hash
 from . import login_manager
 
-class AdminSchool(UserMixin, db.Model):
-    __tablename__ = 'AdminSchools'
+class Permission:
+    AJOUTER_STUDENT = 0x01
+    SUPPRIMER_STUDENT = 0x02
+    MODIFER_STUDENT = 0x04
+    AJOUTER_SCHOOL = 0x08
+    SUPPRIMER_SCHOOL = 0x10
+    MODIFIER_SCHOOL  = 0x80
+
+class User(UserMixin, db.Model):
+    __tablename__ = 'Users'
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(64),unique = True, index = True)
     username = db.Column(db.String(32), nullable = True)
@@ -34,7 +42,7 @@ class AdminSchool(UserMixin, db.Model):
         school_count = School.query.count()
         for i in range(count):
             randschool = School.query.offset(randint(0, school_count - 1)).first()
-            admin = AdminSchool(email = forgery_py.internet.email_address(),
+            admin = User(email = forgery_py.internet.email_address(),
                                 username = forgery_py.internet.user_name(),
                                 password_hash = forgery_py.lorem_ipsum.word(),
                                 school = randschool)
@@ -45,11 +53,11 @@ class AdminSchool(UserMixin, db.Model):
                 db.session.rollback()
 
     def __repr__(self):
-        return '<AdminSchool {email}>'.format(email = self.email)
+        return '<User {email}>'.format(email = self.email)
 
 @login_manager.user_loader
 def load_admin(admin_id):
-    return AdminSchool.query.get(int(admin_id))
+    return User.query.get(int(admin_id))
 
 class Student(db.Model):
     __tablename__ = 'students'
@@ -122,7 +130,7 @@ class School(db.Model):
     street_name = db.Column(db.String(20), index = True)
     #number = db.Column(db.Integer)
     students = db.relationship('Student', backref = 'school', lazy = 'dynamic')
-    admins = db.relationship('AdminSchool', backref = 'school', lazy = 'dynamic')
+    admins = db.relationship('User', backref = 'school', lazy = 'dynamic')
 
     @staticmethod
     def generate_fake(count = 100):

@@ -1,7 +1,7 @@
 """premiere migration
 
 Revision ID: 3b5cf265e660
-Revises: 
+Revises:
 Create Date: 2019-02-06 07:38:06.346213
 
 """
@@ -44,7 +44,7 @@ def upgrade():
     op.create_index(op.f('ix_schools_name'), 'schools', ['name'], unique=False)
     op.create_index(op.f('ix_schools_state'), 'schools', ['state'], unique=False)
     op.create_index(op.f('ix_schools_street_name'), 'schools', ['street_name'], unique=False)
-    op.create_table('AdminSchools',
+    op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('email', sa.String(length=64), nullable=True),
     sa.Column('username', sa.String(length=32), nullable=True),
@@ -53,7 +53,7 @@ def upgrade():
     sa.ForeignKeyConstraint(['school_id'], ['schools.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
-    op.create_index(op.f('ix_AdminSchools_email'), 'AdminSchools', ['email'], unique=True)
+    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
     op.create_table('students',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('first_name', sa.String(length=15), nullable=True),
@@ -86,8 +86,8 @@ def downgrade():
     op.drop_index(op.f('ix_students_forename'), table_name='students')
     op.drop_index(op.f('ix_students_first_name'), table_name='students')
     op.drop_table('students')
-    op.drop_index(op.f('ix_AdminSchools_email'), table_name='AdminSchools')
-    op.drop_table('AdminSchools')
+    op.drop_index(op.f('ix_users_email'), table_name='users')
+    op.drop_table('users')
     op.drop_index(op.f('ix_schools_street_name'), table_name='schools')
     op.drop_index(op.f('ix_schools_state'), table_name='schools')
     op.drop_index(op.f('ix_schools_name'), table_name='schools')
