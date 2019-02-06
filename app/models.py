@@ -64,6 +64,8 @@ class Student(db.Model):
     sex = db.Column(db.String(1), index = True)
     birth = db.Column(db.Date)
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
+    Departement_id = db.Column(db.Integer, db.ForeignKey('departements.id'))
+    Promotion_id = db.Column(db.Integer, db.ForeignKey('promotions.id'))
     pourcentage = db.Column(db.Integer, index = True)
 
     @staticmethod
