@@ -6,12 +6,41 @@ from werkzeug.security import generate_password_hash,\
 from . import login_manager
 
 class Permission:
-    AJOUTER_STUDENT = 0x01
-    SUPPRIMER_STUDENT = 0x02
-    MODIFER_STUDENT = 0x04
-    AJOUTER_SCHOOL = 0x08
-    SUPPRIMER_SCHOOL = 0x10
-    MODIFIER_SCHOOL  = 0x80
+    AJOUTER_ETUDIANT = 0x01
+    SUPPRIMER_ETUDIANT = 0x02
+    MODIFER_ETUDIANT = 0x04
+    AJOUTER_ECOLE = 0x08
+    SUPPRIMER_ECOLE = 0x10
+    MODIFIER_ECOLE  = 0x80
+
+class Role(db.Model):
+    __tablename__ = 'roles'
+    id = db.Column(db.Integer, primary_key=True)
+    nom = db.Column(db.String(64), unique=True)
+    permissions = db.Column(db.Integer)
+    users = db.relationship('User', backref='role', lazy='dynamic')
+
+    @staticmethod
+    def inserer_roles():
+        roles = {
+            'Utilisateur': (Permission.AJOUTER_ETUDIANT |
+                            Permission.MODIFER_ETUDIANT),
+            'Moderateur': (Permission.AJOUTER_ETUDIANT |
+                           Permission.MODIFER_ETUDIANT |
+                           Permission.SUPPRIMER_ETUDIANT),
+            'Moine': (Permission.AJOUTER_ETUDIANT |
+                      Permission.MODIFER_ETUDIANT |
+                      Permission.AJOUTER_ECOLE |
+                      Permission.MODIFIER_ECOLE),
+            'Guru': (0xff)
+        }
+        for r in roles:
+            role = Role.query.filter_by(nom=r).first()
+            if role is None:
+                role = Role(nom=r)
+            role.permissions = roles[r]
+            db.session.add(role)
+        db.session.commit()
 
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
@@ -20,6 +49,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(32), nullable = True)
     password_hash = db.Column(db.String(128))
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
+    role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
 
     @property
     def password(self):
