@@ -4,14 +4,7 @@ from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash,\
                               check_password_hash
 from . import login_manager
-
-class Permission:
-    AJOUTER_ETUDIANT = 0x01
-    SUPPRIMER_ETUDIANT = 0x02
-    MODIFER_ETUDIANT = 0x04
-    AJOUTER_ECOLE = 0x08
-    SUPPRIMER_ECOLE = 0x10
-    MODIFIER_ECOLE  = 0x80
+from utils import Permission
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -42,6 +35,9 @@ class Role(db.Model):
             db.session.add(role)
         db.session.commit()
 
+    def __repr__(self):
+        return '<Role {nom}>'.format(nom = self.nom)
+
 class User(UserMixin, db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key = True)
@@ -50,6 +46,16 @@ class User(UserMixin, db.Model):
     password_hash = db.Column(db.String(128))
     school_id = db.Column(db.Integer, db.ForeignKey('schools.id'))
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'))
+
+    def peut(self, permissions):
+        return self.role is not None and\
+            (self.role.permissions & permissions) == permissions
+
+    def est_guru(self):
+        return self.peut(Permission.SUPPRIMER_ECOLE)
+
+    def est_moine(self):
+        return self.peut(Permission.MODIFIER_ECOLE)
 
     @property
     def password(self):

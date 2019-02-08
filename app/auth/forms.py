@@ -36,4 +36,4 @@ class LoginForm(Form):
                                              Email()])
     password = PasswordField('Mot de passe', validators=[Required()])
     remember_me = BooleanField('Keep me logged in')
-    submit = SubmitField('Connection')
+    submit = SubmitField('Connexion')

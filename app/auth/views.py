@@ -1,19 +1,26 @@
 from flask import render_template, flash, redirect, url_for, request, send_file, current_app
 from . import auth
-from .forms import AddStudentForm, AddSchoolForm, registered_student, LoginForm
+from .forms import *
 from flask_login import login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
+from ..decorateurs import moine_requis
 import os
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    from ..models import AdminSchool
+    from ..models import User
     form = LoginForm()
     if form.validate_on_submit():
-        admin_school = AdminSchool.query.filter_by(email=form.email.data).first()
-        if admin_school is not None and admin_school.verify_password(form.password.data):
-            login_user(admin_school, form.remember_me.data)
-            return redirect(request.args.get('next') or url_for('auth.admin_schools'))
+        admin = User.query.filter_by(email=form.email.data).first()
+        if admin is not None and admin.verify_password(form.password.data):
+            login_user(admin, form.remember_me.data)
+            if admin.est_moine():
+                return redirect(request.args.get('next') or url_for('auth.admin_schools'))
+            elif admin.school is not None:
+                school_id = admin.school.id
+                return redirect(request.args.get('next') or url_for('auth.admin_students', id=school_id, _external=True))
+            else:
+                return redirect(request.args.get('next') or url_for('main.index'))
         flash('Invalid username or password.')
     return render_template('login.html', form=form)
 
@@ -26,6 +33,7 @@ def logout():
 
 @auth.route('/schools', methods=['GET', 'POST'])
 @login_required
+@moine_requis
 def admin_schools():
     from ..models import School
     from .. import db
@@ -47,6 +55,7 @@ def admin_schools():
 
 @auth.route('/school/delete/<int:id>', methods=['GET'])
 @login_required
+@moine_requis
 def delete_school(id):
     from ..models import School
     from .. import db
@@ -59,6 +68,7 @@ def delete_school(id):
 
 @auth.route('/school/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
+@moine_requis
 def edit_school(id):
     from ..models import School
     from .. import db

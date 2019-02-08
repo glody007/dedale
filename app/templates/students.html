@@ -48,7 +48,7 @@
       </div>
     </div>
 
-    <table class="table">
+    <table class="table table-bordered">
       <thead>
         <tr>
           <th width="10%">#</th>
@@ -68,12 +68,12 @@
           <td>{{ student.last_name }}</td>
           <td>
             <a href="{{ url_for('auth.delete_student', id=student.id) }}">
-              <i class="fas fa-trash"></i>Delete
+              <i class="fas fa-trash"></i>Supprimer
             </a>
           </td>
           <td>
             <a href="{{ url_for('auth.edit_student', id=student.id) }}">
-              <i class="fas fa-pencil-alt"></i>Edit
+              <i class="fas fa-pencil-alt"></i>Modifier
             </a>
           </td>
         {% endfor %}
