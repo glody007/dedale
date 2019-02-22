@@ -1,14 +1,15 @@
 from flask_wtf import Form
 from wtforms import StringField, BooleanField, SubmitField,\
-                    RadioField, PasswordField, ValidationError
+                    RadioField, PasswordField, ValidationError, IntegerField
 from wtforms.fields.html5 import DateField
-from wtforms.validators import Required, Length, Email
+from wtforms.validators import Required, Length, Email, NumberRange, Optional
 
 class AddStudentForm(Form):
     first_name = StringField('Nom', validators=[Required(), Length(1, 15)])
     last_name = StringField('Post-nom', validators=[Required(), Length(1, 15)])
     forename = StringField('Forename', validators=[Required(), Length(1, 15)])
     birth = DateField('Date de naissance')
+    pourcentage = IntegerField('Pourcentage', validators=[NumberRange(min=0, max=100, message=None), Optional()])
     sex = RadioField('Sex', choices=[('F', 'Female'), ('M', 'Male')], validators=[Required()])
     submit = SubmitField('Envoyer')
 

@@ -5,10 +5,10 @@ from flask_login import login_user, logout_user, login_required
 from werkzeug.utils import secure_filename
 from ..decorateurs import moine_requis
 import os
+from ..models import *
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login():
-    from ..models import User
     form = LoginForm()
     if form.validate_on_submit():
         admin = User.query.filter_by(email=form.email.data).first()
@@ -35,8 +35,6 @@ def logout():
 @login_required
 @moine_requis
 def admin_schools():
-    from ..models import School
-    from .. import db
 
     form = AddSchoolForm()
 
@@ -57,9 +55,6 @@ def admin_schools():
 @login_required
 @moine_requis
 def delete_school(id):
-    from ..models import School
-    from .. import db
-
     school = School.query.get_or_404(id)
     db.session.delete(school)
     db.session.commit()
@@ -70,9 +65,6 @@ def delete_school(id):
 @login_required
 @moine_requis
 def edit_school(id):
-    from ..models import School
-    from .. import db
-
     school = School.query.get_or_404(id)
     form = AddSchoolForm()
 
@@ -97,7 +89,6 @@ def edit_school(id):
 @auth.route('/schools/<int:id>', methods=['GET', 'POST'])
 @login_required
 def school_students(id):
-    from ..models import Student, School
     school = School.query.get_or_404(id)
     form = AddStudentForm()
 
@@ -107,9 +98,6 @@ def school_students(id):
 @auth.route('/school/<int:id>', methods=['GET', 'POST'])
 @login_required
 def admin_students(id):
-    from ..models import Student, School
-    from .. import db
-
     school = School.query.get_or_404(id)
     form = AddStudentForm()
     registered = registered_student(form)
@@ -120,7 +108,8 @@ def admin_students(id):
                           forename=form.forename.data,
                           birth=form.birth.data,
                           school_id=id,
-                          sex=form.sex.data)
+                          sex=form.sex.data,
+                          pourcentage=form.pourcentage.data)
         db.session.add(student)
         db.session.commit()
 
@@ -133,9 +122,6 @@ def admin_students(id):
 @auth.route('/students/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
 def delete_student(id):
-    from ..models import Student
-    from .. import db
-
     student = Student.query.get_or_404(id)
     db.session.delete(student)
     db.session.commit()
@@ -145,9 +131,6 @@ def delete_student(id):
 @auth.route('/students/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
 def edit_student(id):
-    from ..models import Student
-    from .. import db
-
     student = Student.query.get_or_404(id)
     form = AddStudentForm()
     registered = registered_student(form)
@@ -158,6 +141,7 @@ def edit_student(id):
         student.forename   = form.forename.data
         student.sex        = form.sex.data
         student.birth      = form.birth.data
+        student.pourcentage= form.pourcentage.data
 
         db.session.add(student)
         db.session.commit()
@@ -167,13 +151,13 @@ def edit_student(id):
     form.last_name.data  = student.last_name
     form.forename.data   = student.forename
     form.sex.data        = student.sex
-    form.birth           = student.birth
+    form.birth.data      = student.birth
+    form.pourcentage.data= student.pourcentage
     return render_template('update_student.html', form=form)
 
 @auth.route('/file-download/<int:id>')
 @login_required
 def download_file(id):
-    from ..models import School
     from ..qr_in_pdf import addQrInPdfFromDatas
     from ..url_map import string_from_num
     taille_qr = (100, 100)
@@ -207,7 +191,6 @@ def allowed_file(filename):
 @login_required
 def upload_file(id):
     from ..excel_import import ExcelDataExtractor
-    from ..models import Student, add_students_to_school_from_dicos
 
     if request.method == 'POST':
         # check if the post request has the file part
