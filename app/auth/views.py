@@ -1,9 +1,9 @@
 from flask import render_template, flash, redirect, url_for, request, send_file, current_app
 from . import auth
 from .forms import *
-from flask_login import login_user, logout_user, login_required
+from flask_login import login_user, logout_user, login_required, current_user
 from werkzeug.utils import secure_filename
-from ..decorateurs import moine_requis
+from ..decorateurs import *
 import os
 from ..models import *
 
@@ -37,7 +37,6 @@ def logout():
 def admin_schools():
 
     form = AddSchoolForm()
-
     if form.validate_on_submit():
         school = School(email=form.email.data,
                         name=form.name.data,
@@ -86,18 +85,10 @@ def edit_school(id):
     form.street_name.data = school.street_name
     return render_template('update_school.html', form=form)
 
-@auth.route('/schools/<int:id>', methods=['GET', 'POST'])
-@login_required
-def school_students(id):
-    school = School.query.get_or_404(id)
-    form = AddStudentForm()
-
-    students =  school.students
-    return render_template('students.html', students=students, form=form, school_id=id)
-
 @auth.route('/school/<int:id>', methods=['GET', 'POST'])
 @login_required
 def admin_students(id):
+    current_user.peut_acceder_ou_403(id)
     school = School.query.get_or_404(id)
     form = AddStudentForm()
     registered = registered_student(form)
@@ -121,7 +112,9 @@ def admin_students(id):
 
 @auth.route('/students/delete/<int:id>', methods=['GET', 'POST'])
 @login_required
+@permission_requise(Permission.SUPPRIMER_ETUDIANT)
 def delete_student(id):
+    current_user.peut_acceder_ou_403(id)
     student = Student.query.get_or_404(id)
     db.session.delete(student)
     db.session.commit()
@@ -130,7 +123,9 @@ def delete_student(id):
 
 @auth.route('/students/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
+@permission_requise(Permission.MODIFER_ETUDIANT)
 def edit_student(id):
+    current_user.peut_acceder_ou_403(id)
     student = Student.query.get_or_404(id)
     form = AddStudentForm()
     registered = registered_student(form)

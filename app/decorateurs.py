@@ -1,7 +1,7 @@
 from functools import wraps
 from flask import abort
 from flask_login import current_user
-from utils import Permission
+from models import Permission
 
 def permission_requise(permission):
     def decorateur(f):
@@ -18,3 +18,6 @@ def guru_requis(f):
 
 def moine_requis(f):
     return permission_requise(Permission.MODIFIER_ECOLE)(f)
+
+def moderateur_requis(f):
+    return permission_requise(Permission.SUPPRIMER_ETUDIANT)(f)

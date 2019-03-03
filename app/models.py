@@ -4,7 +4,16 @@ from sqlalchemy import UniqueConstraint
 from werkzeug.security import generate_password_hash,\
                               check_password_hash
 from . import login_manager
-from utils import Permission
+from flask import abort
+
+class Permission:
+    AJOUTER_ETUDIANT = 0x01
+    SUPPRIMER_ETUDIANT = 0x02
+    MODIFER_ETUDIANT = 0x04
+    AJOUTER_ECOLE = 0x08
+    MODIFIER_ECOLE  = 0x10
+    SUPPRIMER_ECOLE = 0x80
+
 
 class Role(db.Model):
     __tablename__ = 'roles'
@@ -56,6 +65,12 @@ class User(UserMixin, db.Model):
 
     def est_moine(self):
         return self.peut(Permission.MODIFIER_ECOLE)
+
+    def peut_acceder_ou_403(self, school_id):
+        guru = self.est_guru()
+        moine = self.est_moine()
+        if not guru and not moine and self.school_id != school_id:
+            abort(403)
 
     @property
     def password(self):
