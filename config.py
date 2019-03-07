@@ -20,6 +20,29 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     TESTING = True
+    DATAS = {
+            'user' : {'email' : 'nagato@dedale.xyz',
+                      'password' : '12345678',
+                      'role_name' : 'Guru'},
+
+            'school' : {'name' : 'konoha',
+                        'state' : 'mangas',
+                        'city' : 'sereitei',
+                        'street_name' : 'yamamoto',
+                        'email' : 'kushiki@biakuya.com'},
+
+            'edited_school' : {'name' : 'gottam',
+                               'state' : 'comics',
+                               'city' : 'sereitei',
+                               'street_name' : 'yamamoto',
+                               'email' : 'kushiki@biakuya.com'},
+            'school_id' : None,
+
+            'student' : {'first_name' : 'lubaba',
+                         'last_name' : 'mbutwile',
+                         'forename' : 'dyglo',
+                         'sex' : 'M'}
+            }
 
 class ProductionConfig(Config):
     SQLALCHEMY_DATABASE_URI = "mysql+mysqlconnector://{username}:{password}@{hostname}/{databasename}".format(
