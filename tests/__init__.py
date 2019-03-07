@@ -25,12 +25,12 @@ class FlaskBaseTestCase(unittest.TestCase):
     def add_test_datas_to_db(self):
         user = self.create_user()
         school = self.create_school()
-        student = self.create_student()
-
+        student = self.create_student(school)
         db.session.add_all([user, school, student])
         try:
             db.session.commit()
             self.datas['school_id'] = school.id
+            self.datas['student_id'] = student.id
         except IntegrityError:
             db.session.rollback()
 
@@ -45,9 +45,10 @@ class FlaskBaseTestCase(unittest.TestCase):
         school = School(name=self.school_datas['name'])
         return school
 
-    def create_student(self):
+    def create_student(self, school):
         student = Student(first_name=self.student_datas['first_name'],
                           last_name=self.student_datas['last_name'],
                           forename=self.student_datas['forename'],
                           sex=self.student_datas['sex'])
+        student.school = school
         return student

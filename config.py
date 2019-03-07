@@ -38,10 +38,17 @@ class TestingConfig(Config):
                                'email' : 'kushiki@biakuya.com'},
             'school_id' : None,
 
+            'student_id' : None,
+
             'student' : {'first_name' : 'lubaba',
                          'last_name' : 'mbutwile',
                          'forename' : 'dyglo',
-                         'sex' : 'M'}
+                         'sex' : 'M'},
+
+            'edited_student' : {'first_name' : 'richard',
+                                'last_name' : 'dawkins',
+                                'forename' : 'light',
+                                'sex' : 'M'}
             }
 
 class ProductionConfig(Config):
