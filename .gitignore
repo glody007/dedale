@@ -2,3 +2,5 @@
 *.db
 venv
 tmp
+os
+*tmp.png
