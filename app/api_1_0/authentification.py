@@ -1,5 +1,6 @@
 from flask_httpauth import HTTPBasicAuth
 from ..models import User
+from . import api
 
 auth = HTTPBasicAuth()
 
@@ -16,6 +17,10 @@ def verify_password(email_or_token, password):
     g.current_user = user
     g.token_used = False
     return user.verify_password(password)
+
+@auth.error_handler
+def auth_error():
+    return unauthorized('Invalid credentials')
 
 @api.route('/token')
 def get_token():

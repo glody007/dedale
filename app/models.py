@@ -141,6 +141,17 @@ class Student(db.Model):
     Promotion_id = db.Column(db.Integer, db.ForeignKey('promotions.id'))
     pourcentage = db.Column(db.Integer, index = True)
 
+    def to_json(self):
+        json_student = {
+            'url': url_for('api.get_student', id=self.id, _external=True),
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'forename': self.forename,
+            'sex': self.sex,
+            'birth': self.birth,
+            'school': url_for('api.get_school', id=self.school_id, _external=True)
+        }
+
     @staticmethod
     def generate_fake(count = 1000):
         from sqlalchemy.exc import IntegrityError
@@ -193,9 +204,19 @@ class School(db.Model):
     state = db.Column(db.String(20), index = True)
     city = db.Column(db.String(20), index = True)
     street_name = db.Column(db.String(20), index = True)
-    #number = db.Column(db.Integer)
     students = db.relationship('Student', backref = 'school', lazy = 'dynamic')
     admins = db.relationship('User', backref = 'school', lazy = 'dynamic')
+
+    def to_json(self):
+        json_school = {
+            'url': url_for('api.get_school', id=self.id, _external=True),
+            'name': self.name,
+            'state': self.state,
+            'city': self.city,
+            'street_name': self.street_name,
+            'students': url_for('api.get_school_students', id=self.id, _external=True)
+        }
+        return json_school
 
     @staticmethod
     def generate_fake(count = 100):

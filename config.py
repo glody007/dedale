@@ -4,7 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 print(os.path.dirname(__file__))
 class Config:
     SQLALCHEMY_DATABASE_URI = 'sqlite:///' + os.path.join(basedir, 'test.db')
-    SECRET_KEY = "mysecretkey"
+    SECRET_KEY = "richard_dawkins_dedal"
     UPLOAD_FOLDER = '/tmp'
     ALLOWED_EXTENSIONS = set(['xlsx'])
 
