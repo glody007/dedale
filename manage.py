@@ -24,7 +24,7 @@ def test(coverage=False):
         os.environ['FLASK_COVERAGE'] = '1'
         os.execvp(sys.executable, [sys.executable] + sys.argv)
     import unittest
-    tests = unittest.TestLoader().discover('.', pattern = "test_*.py")
+    tests = unittest.TestLoader().discover('.', pattern = "test_api.py")
     unittest.TextTestRunner(verbosity=2).run(tests)
     if COV:
         COV.stop()

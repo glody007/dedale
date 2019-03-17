@@ -43,12 +43,14 @@ class TestingConfig(Config):
             'student' : {'first_name' : 'lubaba',
                          'last_name' : 'mbutwile',
                          'forename' : 'dyglo',
-                         'sex' : 'M'},
+                         'sex' : 'M',
+                         'pourcentage' : 60},
 
             'edited_student' : {'first_name' : 'richard',
                                 'last_name' : 'dawkins',
                                 'forename' : 'light',
-                                'sex' : 'M'}
+                                'sex' : 'M',
+                                'pourcentage' : 56}
             }
 
 class ProductionConfig(Config):
