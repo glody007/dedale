@@ -1,6 +1,7 @@
 *.pyc
 *.db
+*.db-journal
+*.png
 venv
 tmp
 os
-*tmp.png

@@ -123,7 +123,7 @@ def delete_student(id):
 
 @auth.route('/students/edit/<int:id>', methods=['GET', 'POST'])
 @login_required
-@permission_requise(Permission.MODIFER_ETUDIANT)
+@permission_requise(Permission.MODIFIER_ETUDIANT)
 def edit_student(id):
     current_user.peut_acceder_ou_403(id)
     student = Student.query.get_or_404(id)

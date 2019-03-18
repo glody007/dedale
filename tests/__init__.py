@@ -1,6 +1,8 @@
 import unittest
+from sqlalchemy.exc import IntegrityError
 from app import create_app, db
 from app.models import User, School, Student, Role
+from app.utils import create_object_from_dico
 
 class FlaskBaseTestCase(unittest.TestCase):
 
@@ -14,7 +16,6 @@ class FlaskBaseTestCase(unittest.TestCase):
         self.user_datas = self.datas['user']
         self.school_datas = self.datas['school']
         self.student_datas = self.datas['student']
-        self.add_test_datas_to_db()
         self.client = self.app.test_client(use_cookies=True)
 
     def tearDown(self):
@@ -42,7 +43,7 @@ class FlaskBaseTestCase(unittest.TestCase):
         return user
 
     def create_school(self):
-        school = School(name=self.school_datas['name'])
+        school = create_object_from_dico(School, self.school_datas)
         return school
 
     def create_student(self, school):

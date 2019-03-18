@@ -8,6 +8,7 @@ class FlaskClientTestCase(FlaskBaseTestCase):
 
     def setUp(self):
         FlaskBaseTestCase.setUp(self)
+        self.add_test_datas_to_db()
 
     def login(self, email='', password=''):
         reponse = self.client.post(url_for('auth.login'), data={

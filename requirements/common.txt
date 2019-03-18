@@ -25,3 +25,4 @@ Werkzeug==0.14.1
 WTForms==2.1
 openpyxl==2.5.12
 reportlab==3.5.12
+Flask-HTTPAuth==3.2.4

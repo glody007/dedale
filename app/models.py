@@ -1,15 +1,18 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy import UniqueConstraint
+from sqlalchemy.exc import IntegrityError
 from werkzeug.security import generate_password_hash,\
                               check_password_hash
 from . import login_manager
-from flask import abort
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask import abort, current_app, url_for
+from .exceptions import ValidationError
 
 class Permission:
     AJOUTER_ETUDIANT = 0x01
     SUPPRIMER_ETUDIANT = 0x02
-    MODIFER_ETUDIANT = 0x04
+    MODIFIER_ETUDIANT = 0x04
     AJOUTER_ECOLE = 0x08
     MODIFIER_ECOLE  = 0x10
     SUPPRIMER_ECOLE = 0x80
@@ -26,12 +29,12 @@ class Role(db.Model):
     def inserer_roles():
         roles = {
             'Utilisateur': (Permission.AJOUTER_ETUDIANT |
-                            Permission.MODIFER_ETUDIANT),
+                            Permission.MODIFIER_ETUDIANT),
             'Moderateur': (Permission.AJOUTER_ETUDIANT |
-                           Permission.MODIFER_ETUDIANT |
+                           Permission.MODIFIER_ETUDIANT |
                            Permission.SUPPRIMER_ETUDIANT),
             'Moine': (Permission.AJOUTER_ETUDIANT |
-                      Permission.MODIFER_ETUDIANT |
+                      Permission.MODIFIER_ETUDIANT |
                       Permission.AJOUTER_ECOLE |
                       Permission.MODIFIER_ECOLE),
             'Guru': (0xff)
@@ -83,6 +86,20 @@ class User(UserMixin, db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
+    def generate_auth_token(self, expiration):
+        s = Serializer(current_app.config['SECRET_KEY'],
+                        expires_in=expiration)
+        return s.dumps({'id': self.id})
+
+    @staticmethod
+    def verify_auth_token(token):
+        s = Serializer(current_app.config['SECRET_KEY'])
+        try:
+            data = s.loads(token)
+        except:
+            return None
+        return User.query.get(data['id'])
+
     @staticmethod
     def generate_fake(count = 100):
         from sqlalchemy.exc import IntegrityError
@@ -126,6 +143,49 @@ class Student(db.Model):
     Departement_id = db.Column(db.Integer, db.ForeignKey('departements.id'))
     Promotion_id = db.Column(db.Integer, db.ForeignKey('promotions.id'))
     pourcentage = db.Column(db.Integer, index = True)
+
+    @staticmethod
+    def from_json(json_student):
+        first_name = json_student.get('first_name')
+        last_name = json_student.get('last_name')
+        forename = json_student.get('forename')
+        sex = json_student.get('sex')
+        birth = json_student.get('birth')
+        pourcentage = json_student.get('pourcentage')
+        if is_none_or_empty(first_name) or is_none_or_empty(last_name) or\
+           is_none_or_empty(forename) or is_none_or_empty(sex) or\
+           is_none_or_empty(pourcentage):
+           raise ValidationError('one field is empty')
+        return Student(first_name=first_name, last_name=last_name,
+                        forename=forename, sex=sex, birth=birth,
+                        pourcentage=pourcentage)
+
+    def to_json(self):
+        school_url = ""
+        if self.school_id is not None:
+            school_url = url_for('api.get_school', id=school_id, _external=True)
+
+        json_student = {
+            'url': url_for('api.get_student', id=self.id, _external=True),
+            'first_name': self.first_name,
+            'last_name': self.last_name,
+            'forename': self.forename,
+            'sex': self.sex,
+            'birth': self.birth,
+            'pourcentage': self.pourcentage,
+            'school': school_url
+        }
+        return json_student
+
+    def update_student(self, new_student):
+        self.first_name = new_student.first_name
+        self.last_name = new_student.last_name
+        self.forename = new_student.forename
+        self.sex = new_student.sex
+        self.birth = new_student.birth
+        self.pourcentage = new_student.pourcentage
+        db.session.add(self)
+        db.session.commit()
 
     @staticmethod
     def generate_fake(count = 1000):
@@ -179,9 +239,43 @@ class School(db.Model):
     state = db.Column(db.String(20), index = True)
     city = db.Column(db.String(20), index = True)
     street_name = db.Column(db.String(20), index = True)
-    #number = db.Column(db.Integer)
     students = db.relationship('Student', backref = 'school', lazy = 'dynamic')
     admins = db.relationship('User', backref = 'school', lazy = 'dynamic')
+
+    @staticmethod
+    def from_json(json_school):
+        name = json_school.get('name')
+        email = json_school.get('email')
+        state = json_school.get('state')
+        city = json_school.get('city')
+        street_name = json_school.get('street_name')
+        if is_none_or_empty(name) or is_none_or_empty(email) or\
+           is_none_or_empty(state) or is_none_or_empty(city) or\
+           is_none_or_empty(street_name):
+           raise ValidationError('one field is empty')
+        return School(name=name, email=email, state=state,
+                      city=city, street_name=street_name)
+
+    def to_json(self):
+        json_school = {
+            'url': url_for('api.get_school', id=self.id, _external=True),
+            'name': self.name,
+            'email': self.email,
+            'state': self.state,
+            'city': self.city,
+            'street_name': self.street_name,
+            'students': url_for('api.get_school_students', id=self.id, _external=True)
+        }
+        return json_school
+
+    def update_school(self, new_school):
+        self.name = new_school.name
+        self.email = new_school.email
+        self.state = new_school.state
+        self.city = new_school.city
+        self.street_name = new_school.street_name
+        db.session.add(self)
+        db.session.commit()
 
     @staticmethod
     def generate_fake(count = 100):
@@ -238,3 +332,8 @@ def from_students_of_school_to_dicos(school_id):
                               'forename' : student.forename,
                               'sex' : student.sex})
     return students_datas
+
+def is_none_or_empty(string):
+    if string is None or string == '':
+        return True
+    return False
