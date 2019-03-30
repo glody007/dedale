@@ -185,7 +185,7 @@ def allowed_file(filename):
 @auth.route('/file-upload/<int:id>', methods=['POST'])
 @login_required
 def upload_file(id):
-    from ..excel_import import ExcelDataExtractor
+    from ..excelprocessing import ExcelDataExtractor
 
     if request.method == 'POST':
         # check if the post request has the file part
@@ -204,8 +204,14 @@ def upload_file(id):
             file.save(upload_folder_name)
             #import students data from file
             #create list of dicos from those datas
-            xlsxToList = ExcelDataExtractor(upload_folder_name)
-            students_dicos = xlsxToList.getStudents()
+            extractor = ExcelDataExtractor(upload_folder_name)
+            columns_mapping = {
+                               1 : 'first_name',
+                               2 : 'last_name',
+                               3 : 'forename',
+                               4 : 'sex'
+                              }
+            students_dicos = extractor.get_labeled_datas(columns_mapping)
             #add students to database from dicos
             add_students_to_school_from_dicos(students_dicos, id)
 

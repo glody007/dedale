@@ -11,19 +11,21 @@ from app import create_app, db
 from app.models import *
 from flask_script import Manager, Shell
 
-#app = create_app(os.getenv('FLASK_CONFIG') or 'default')
-app = create_app('production')
+app = create_app(os.getenv('FLASK_CONFIG') or 'default')
 manager = Manager(app)
 
 @manager.command
-def test(coverage=False):
+def test(coverage=False, select="all"):
     """Run the unit tests."""
     if coverage and not os.environ.get('FLASK_COVERAGE'):
         import sys
         os.environ['FLASK_COVERAGE'] = '1'
         os.execvp(sys.executable, [sys.executable] + sys.argv)
     import unittest
-    tests = unittest.TestLoader().discover('.', pattern = "test_api.py")
+    if select == "all":
+        tests = unittest.TestLoader().discover('.', pattern = "test_*.py")
+    else:
+        tests = unittest.TestLoader().discover('.', pattern = select + ".py")
     unittest.TextTestRunner(verbosity=2).run(tests)
     if COV:
         COV.stop()

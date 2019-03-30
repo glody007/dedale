@@ -1,5 +1,5 @@
 import unittest
-from app.utils import dict_contient, create_object_from_dico
+from app.utils import *
 from app.models import School
 
 class UtilTestCase(unittest.TestCase):
@@ -29,6 +29,12 @@ class UtilTestCase(unittest.TestCase):
                                    'ag' : 71
                                   }
 
+        self.identity_with_less_keys = {
+                                        'first_name' : 'richard',
+                                        'age' : 77
+                                       }
+
+
     def test_dict_contient(self):
         identity = self.identity
         true_identity = self.true_identity
@@ -41,10 +47,8 @@ class UtilTestCase(unittest.TestCase):
         identity_egal_fake_identity = dict_contient(identity, fake_identity)
         self.assertFalse(identity_egal_fake_identity)
 
-        identity_egal_fake_identity = dict_contient(identity, fake_identity)
-        self.assertFalse(identity_egal_fake_identity)
-
-        identity_egal_wrong_key_identity = dict_contient(identity, wrong_key_identity)
+        identity_egal_wrong_key_identity = dict_contient(identity,
+                                                         wrong_key_identity)
         self.assertFalse(identity_egal_wrong_key_identity)
 
     def test_create_object_from_dico(self):
@@ -67,3 +71,22 @@ class UtilTestCase(unittest.TestCase):
 
         self.assertTrue(good_identity is not None,
                         "with good dict it doesn't create object")
+
+    def test_dict_contient_keys(self):
+        contains_equals_keys = dict_contient_keys(self.identity,
+                                                  self.true_identity)
+        self.assertTrue(contains_equals_keys, "with goods keys it return False")
+
+        contains_wrong_key = dict_contient_keys(self.identity,
+                                                  self.wrong_key_identity)
+        self.assertFalse(contains_wrong_key, "with wrongs keys it return True")
+
+        contains_identity_with_less_keys = dict_contient_keys(self.identity,
+                                                  self.identity_with_less_keys)
+        self.assertTrue(contains_identity_with_less_keys,
+                                    "with less keys it return False")
+
+        contains_identity_with_more_keys =\
+                dict_contient_keys(self.identity_with_less_keys, self.identity)
+        self.assertFalse(contains_identity_with_more_keys,
+                                    "with more keys it return True")
