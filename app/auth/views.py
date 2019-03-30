@@ -205,13 +205,14 @@ def upload_file(id):
             #import students data from file
             #create list of dicos from those datas
             extractor = ExcelDataExtractor(upload_folder_name)
-            columns_mapping = {
+            columns_alias = {
                                1 : 'first_name',
                                2 : 'last_name',
                                3 : 'forename',
                                4 : 'sex'
                               }
-            students_dicos = extractor.get_labeled_datas(columns_mapping)
+            students_dicos =\
+                extractor.get_datas_labeled_by_columns_alias(columns_alias)
             #add students to database from dicos
             add_students_to_school_from_dicos(students_dicos, id)
 
